@@ -18,7 +18,7 @@ export default function Header() {
   const [role, setRole] = useState(false)
 
   return (
-    <div className="flex justify-between items-baseline px-16 md:px-30 pt-8">
+    <div className="flex justify-between items-baseline px-16 md:px-30 pt-8 pb-16">
         <h1 className="flex-1 text-black text-4xl font-bold">
             eHotels
         </h1>
