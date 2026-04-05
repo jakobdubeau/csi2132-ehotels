@@ -1,8 +1,9 @@
 import Image from "next/image";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-white">
+    <div className="flex flex-col flex-1 items-center bg-white">
       <main className="">
         <div className="relative">
           <Image
@@ -18,7 +19,8 @@ export default function Home() {
             </h2>
           </div>
         </div>
-        <div className="text-center pt-28 text-2xl font-bold pb-52">
+        <SearchBar />
+        <div className="text-center pt-20 text-2xl font-bold pb-52">
           Popular Hotels
         </div>
       </main>
