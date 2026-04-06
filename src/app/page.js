@@ -1,5 +1,5 @@
-import Image from "next/image";
-import SearchBar from "../components/SearchBar";
+import Image from "next/image"
+import SearchBar from "../components/SearchBar"
 
 export default function Home() {
   return (
@@ -18,12 +18,11 @@ export default function Home() {
               Enjoy your Dream Vacation
             </h2>
           </div>
-        </div>
-        <SearchBar />
-        <div className="text-center pt-20 text-2xl font-bold pb-52">
-          Popular Hotels
+          <div className="absolute bottom-12 left-0 right-0">
+            <SearchBar />
+          </div>
         </div>
       </main>
     </div>
-  );
+  )
 }

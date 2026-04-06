@@ -1,14 +1,14 @@
 "use client"
 import { useState } from "react"
 
-const tabs = ["Customers", "Employees", "Hotels", "Rooms"]
+const tabs = ["Bookings", "Rentings", "Payments", "Views"]
 
-export default function Insert() {
-  const [activeTab, setActiveTab] = useState("Customers")
+export default function Bookings() {
+  const [activeTab, setActiveTab] = useState("Bookings")
 
   return (
     <div className="flex-1 px-16 md:px-30 py-8">
-      <h1 className="text-3xl font-bold mb-6">Manage Data</h1>
+      <h1 className="text-3xl font-bold mb-6">Employee Dashboard</h1>
       <div className="flex gap-2 mb-8">
         {tabs.map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)}
@@ -20,7 +20,7 @@ export default function Insert() {
         ))}
       </div>
       <div className="text-gray-500">
-        {activeTab} form coming soon
+        {activeTab} section coming soon
       </div>
     </div>
   )

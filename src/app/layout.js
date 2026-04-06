@@ -1,32 +1,30 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Header from "../components/Header";
+import { DM_Sans, DM_Serif_Display } from "next/font/google"
+import "./globals.css"
+import Header from "../components/Header"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
-});
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSerif = DM_Serif_Display({
+  variable: "--font-heading",
+  weight: "400",
   subsets: ["latin"],
-});
+})
 
 export const metadata = {
-  title: "E-Hotels",
+  title: "eHotels",
   description: "CSI2132 Project",
-};
+}
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Header />
         {children}
       </body>
     </html>
-  );
+  )
 }

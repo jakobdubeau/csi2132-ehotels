@@ -29,8 +29,8 @@ export default function SearchBar() {
   const activeFilterCount = [filters.hotelChain, filters.category, filters.totalRooms, filters.minPrice, filters.maxPrice].filter(Boolean).length;
 
   return (
-    <div className="w-full max-w-6xl mx-auto -mt-20 relative z-10 px-4">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-5 flex flex-wrap items-end gap-4">
+    <div className="w-full max-w-6xl mx-auto relative z-10 px-4">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-5 flex flex-wrap items-end gap-4">
         <div className="flex-1 min-w-36">
           <label className="block text-sm font-semibold text-gray-500 mb-1.5 ml-1">Check In</label>
           <input
