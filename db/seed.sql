@@ -594,22 +594,33 @@ INSERT INTO manager (hotel_id, e_ssn) VALUES
 (45, '089-00-0089'), (46, '091-00-0091'), (47, '093-00-0093'), (48, '095-00-0095'),
 (49, '097-00-0097'), (50, '099-00-0099');
 
+-- customers (must come before bookings and rentings)
+INSERT INTO customer (ssn, name, address, registration_date) VALUES
+('111-22-3333', 'Alice Johnson',  '123 Main St, Toronto, ON',    '2025-01-15'),
+('222-33-4444', 'Bob Smith',      '456 Oak Ave, Montreal, QC',   '2025-02-20'),
+('333-44-5555', 'Carol Williams', '789 Pine Rd, Ottawa, ON',     '2025-03-10'),
+('444-55-6666', 'David Brown',    '321 Elm St, Vancouver, BC',   '2025-04-05'),
+('555-66-7777', 'Eve Davis',      '654 Maple Dr, Calgary, AB',   '2025-05-12'),
+('666-77-8888', 'Frank Miller',   '987 Cedar Ln, New York, NY',  '2025-06-18'),
+('777-88-9999', 'Grace Wilson',   '147 Birch Blvd, Miami, FL',   '2025-07-22'),
+('888-99-0000', 'Henry Taylor',   '258 Spruce Ct, Chicago, IL',  '2025-08-30');
+
 -- bookings
-INSERT INTO booking (hotel_id, room_number, start_date, end_date) VALUES
-(1,  101, '2026-04-10', '2026-04-15'),
-(1,  201, '2026-04-12', '2026-04-14'),
-(2,  102, '2026-04-20', '2026-04-25'),
-(5,  301, '2026-05-01', '2026-05-05'),
-(10, 101, '2026-04-15', '2026-04-18'),
-(15, 202, '2026-05-10', '2026-05-14'),
-(20, 101, '2026-04-08', '2026-04-12'),
-(25, 301, '2026-06-01', '2026-06-07');
+INSERT INTO booking (customer_ssn, hotel_id, room_number, start_date, end_date) VALUES
+('111-22-3333', 1,  101, '2026-04-10', '2026-04-15'),
+('222-33-4444', 1,  201, '2026-04-12', '2026-04-14'),
+('333-44-5555', 2,  102, '2026-04-20', '2026-04-25'),
+('444-55-6666', 5,  301, '2026-05-01', '2026-05-05'),
+('555-66-7777', 10, 101, '2026-04-15', '2026-04-18'),
+('666-77-8888', 15, 202, '2026-05-10', '2026-05-14'),
+('777-88-9999', 20, 101, '2026-04-08', '2026-04-12'),
+('888-99-0000', 25, 301, '2026-06-01', '2026-06-07');
 
 -- rentings
-INSERT INTO renting (hotel_id, room_number, e_ssn, start_date, end_date) VALUES
-(1,  102, '002-00-0002', '2026-04-01', '2026-04-05'),
-(3,  201, '006-00-0006', '2026-04-02', '2026-04-06'),
-(10, 202, '020-00-0020', '2026-04-05', '2026-04-09');
+INSERT INTO renting (customer_ssn, hotel_id, room_number, e_ssn, start_date, end_date) VALUES
+('333-44-5555', 1,  102, '002-00-0002', '2026-04-01', '2026-04-05'),
+('555-66-7777', 3,  201, '006-00-0006', '2026-04-02', '2026-04-06'),
+('777-88-9999', 10, 202, '020-00-0020', '2026-04-05', '2026-04-09');
 
 -- payments
 INSERT INTO payment (renting_id, amount, payment_date) VALUES
@@ -617,13 +628,3 @@ INSERT INTO payment (renting_id, amount, payment_date) VALUES
 (2, 1100.00, '2026-04-06'),
 (3, 1860.00, '2026-04-09');
 
--- customers
-INSERT INTO customer (ssn, booking_id, renting_id, name, address, registration_date) VALUES
-('111-22-3333', 1, NULL, 'Alice Johnson',   '123 Main St, Toronto, ON',    '2025-01-15'),
-('222-33-4444', 2, NULL, 'Bob Smith',        '456 Oak Ave, Montreal, QC',   '2025-02-20'),
-('333-44-5555', 3, 1,    'Carol Williams',   '789 Pine Rd, Ottawa, ON',     '2025-03-10'),
-('444-55-6666', 4, NULL, 'David Brown',      '321 Elm St, Vancouver, BC',   '2025-04-05'),
-('555-66-7777', 5, 2,    'Eve Davis',        '654 Maple Dr, Calgary, AB',   '2025-05-12'),
-('666-77-8888', 6, NULL, 'Frank Miller',     '987 Cedar Ln, New York, NY',  '2025-06-18'),
-('777-88-9999', 7, 3,    'Grace Wilson',     '147 Birch Blvd, Miami, FL',   '2025-07-22'),
-('888-99-0000', 8, NULL, 'Henry Taylor',     '258 Spruce Ct, Chicago, IL',  '2025-08-30');

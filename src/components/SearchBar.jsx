@@ -11,7 +11,7 @@ const defaultFilters = {
   hotelChain: "", category: "", totalRooms: "", minPrice: "", maxPrice: "",
 }
 
-export default function SearchBar() {
+export default function SearchBar({ onSearch }) {
   const [filters, setFilters] = useState(defaultFilters)
   const [showFilters, setShowFilters] = useState(false)
   const filterRef = useRef(null)
@@ -171,7 +171,8 @@ export default function SearchBar() {
             </div>
           )}
         </div>
-        <button className="px-8 py-3.5 bg-blue-300 hover:bg-blue-400 text-white rounded-xl text-base font-semibold transition-all cursor-pointer">
+        <button onClick={() => onSearch(filters)}
+          className="px-8 py-3.5 bg-blue-400 hover:bg-blue-300 text-white rounded-xl text-base font-semibold transition-all cursor-pointer">
           Search
         </button>
       </div>

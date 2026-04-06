@@ -107,45 +107,46 @@ CREATE TABLE employee_roles (
     FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE CASCADE
 );
 
---booking (booking_id PK, hotel_id + room_number FK, start_date, end_date)
+--customer (ssn PK, name, address, registration_date)
+CREATE TABLE customer (
+    ssn VARCHAR(11) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address TEXT,
+    registration_date DATE DEFAULT CURRENT_DATE
+);
+
+--booking (booking_id PK, customer_ssn FK, hotel_id + room_number FK, start_date, end_date)
 CREATE TABLE booking (
     booking_id SERIAL PRIMARY KEY,
+    customer_ssn VARCHAR(11) NOT NULL,
     hotel_id INT,
     room_number INT,
     start_date DATE,
     end_date DATE,
     CHECK (end_date > start_date),
+    FOREIGN KEY (customer_ssn) REFERENCES customer(ssn) ON DELETE CASCADE,
     FOREIGN KEY (hotel_id, room_number) REFERENCES room(hotel_id, number) ON DELETE SET NULL
 );
 
---renting (renting_id PK, hotel_id + room_number FK, e_ssn FK, start_date, end_date)
+--renting (renting_id PK, customer_ssn FK, hotel_id + room_number FK, e_ssn FK, start_date, end_date)
 CREATE TABLE renting (
     renting_id SERIAL PRIMARY KEY,
+    customer_ssn VARCHAR(11) NOT NULL,
     hotel_id INT,
     room_number INT,
     e_ssn VARCHAR(11),
     start_date DATE,
     end_date DATE,
     CHECK (end_date > start_date),
+    FOREIGN KEY (customer_ssn) REFERENCES customer(ssn) ON DELETE CASCADE,
     FOREIGN KEY (hotel_id, room_number) REFERENCES room(hotel_id, number) ON DELETE SET NULL,
     FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE SET NULL
-);
-
---customer (ssn PK, booking_id FK, renting_id FK, name, address, registration_date)
-CREATE TABLE customer (
-    ssn VARCHAR(11) PRIMARY KEY,
-    booking_id INT,
-    renting_id INT,
-    name VARCHAR(100) NOT NULL,
-    address TEXT,
-    registration_date DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (booking_id) REFERENCES booking(booking_id) ON DELETE SET NULL,
-    FOREIGN KEY (renting_id) REFERENCES renting(renting_id) ON DELETE SET NULL
 );
 
 -- booking_archive (no FKs, history preserved even after deletes)
 CREATE TABLE booking_archive (
     booking_id INT PRIMARY KEY,
+    customer_ssn VARCHAR(11),
     hotel_id INT,
     room_number INT,
     start_date DATE,
@@ -156,6 +157,7 @@ CREATE TABLE booking_archive (
 -- renting_archive (no FKs, history preserved even after deletes)
 CREATE TABLE renting_archive (
     renting_id INT PRIMARY KEY,
+    customer_ssn VARCHAR(11),
     hotel_id INT,
     room_number INT,
     e_ssn VARCHAR(11),
