@@ -84,11 +84,9 @@ export default function SearchBar({ onSearch }) {
           >
             <SlidersHorizontal size={18} />
             Filters
-            {activeFilterCount > 0 && (
-              <span className="bg-blue-300 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
+            <span className={`text-xs rounded-full w-5 h-5 flex items-center justify-center transition-all ${activeFilterCount > 0 ? "bg-blue-300 text-white" : "invisible"}`}>
+              {activeFilterCount}
+            </span>
           </button>
 
           {showFilters && (
@@ -154,7 +152,7 @@ export default function SearchBar({ onSearch }) {
                       placeholder="Min $"
                       value={filters.minPrice}
                       onChange={(e) => set("minPrice", e.target.value)}
-                      className="flex-1 px-4 py-3.5 bg-gray-50 rounded-xl text-base border border-gray-200 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all"
+                      className="flex-1 min-w-0 px-4 py-3.5 bg-gray-50 rounded-xl text-base border border-gray-200 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all"
                     />
                     <span className="flex items-center text-gray-400">-</span>
                     <input
@@ -163,7 +161,7 @@ export default function SearchBar({ onSearch }) {
                       placeholder="Max $"
                       value={filters.maxPrice}
                       onChange={(e) => set("maxPrice", e.target.value)}
-                      className="flex-1 px-4 py-3.5 bg-gray-50 rounded-xl text-base border border-gray-200 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all"
+                      className="flex-1 min-w-0 px-4 py-3.5 bg-gray-50 rounded-xl text-base border border-gray-200 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all"
                     />
                   </div>
                 </div>
