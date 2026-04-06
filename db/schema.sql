@@ -1,5 +1,12 @@
 -- database schema--
 
+----------QUESTIONS----------
+-- does hotels chain address have to be a PK
+
+
+
+
+
 --hotel_chain (name pk, office_address pk, hotels_num, concact_emails, contact_phone_numbers)
 --Each Hotel chain name, office address, email and phone number must be unique
 CREATE TABLE hotel_chain (
@@ -8,7 +15,7 @@ CREATE TABLE hotel_chain (
     hotels_num INT CHECK (hotels_num >= 0),
     contact_emails TEXT UNIQUE,
     contact_phone_numbers TEXT UNIQUE,
-    PRIMARY KEY (name, office_address),
+    PRIMARY KEY (name, office_address)
 )
 
 CREATE TABLE hotel_chain_email (
@@ -30,14 +37,14 @@ CREATE TABLE hotel_chain_phone (
 --hotel (hotel_id PK, hotel_chain_name FK, address, email, rooms_num, rating, phone_numbers)
 --Each Hotel must have its own unique ID
 CREATE TABLE hotel(
-    hotel_id SERIAL PRIMARY KEY,
+    hotel_id SERIAL PRIMARY KEY CHECK,
     hotel_chain_name VARCHAR(100),
     address VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     rooms_num INT CHECK (rooms_num >= 0),
     rating DECIMAL CHECK (rating >= 0 AND rating <= 5),
     phone_numbers TEXT UNIQUE,
-    FOREIGN KEY (hotel_chain_name) REFERENCES hotel_chain(name) ON DELETE SET NULL
+    FOREIGN KEY (hotel_chain_name) REFERENCES hotel_chain(name, office_address) ON DELETE SET NULL
 )
 
 --hotel_phone (hotel_id PK, phone_number PK)
@@ -51,7 +58,7 @@ CREATE TABLE hotel_phone (
 --room (hotel_id PK, number PK, price, cpacity, can_be_extend, view_type, amenities, damages)
 CREATE TABLE room (
     hotel_id INT,
-    number INT,
+    number INT UNIQUE,
     price DECIMAL CHECK (price >= 0),
     capacity INT CHECK (capacity > 0),
     can_be_extend BOOLEAN,
@@ -68,7 +75,7 @@ CREATE TABLE room_problems (
     number INT,
     problems TEXT,
     PRIMARY KEY (hotel_id, number, problems),
-    FOREIGN KEY (hotel_id, number) REFERENCES room(hotel_id, number) ON DELETE CASCADE
+    FOREIGN KEY (hotel_id, number) REFERENCES room(hotel_id, room_num) ON DELETE CASCADE
 )
 
 --room_amenities (hotel_id PK, number PK, amenities PK)
@@ -77,12 +84,12 @@ CREATE TABLE room_amenities (
     number INT,
     amenities TEXT,
     PRIMARY KEY (hotel_id, number, amenities),
-    FOREIGN KEY (hotel_id, number) REFERENCES room(hotel_id, number) ON DELETE CASCADE
+    FOREIGN KEY (hotel_id, number) REFERENCES room(hotel_id, room_num) ON DELETE CASCADE
 )
 
 --employee (ssn PK, hotel_id FK, full_name, address, roles)
 CREATE TABLE employee (
-    ssn VARCHAR(11) PRIMARY KEY,
+    ssn VARCHAR(11) UNIQUE PRIMARY KEY,
     hotel_id INT,
     full_name VARCHAR(100) NOT NULL,
     address TEXT,
@@ -99,23 +106,32 @@ CREATE TABLE manager (
     FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE CASCADE
 )
 
--- employee — employee_id PK, hotel_id FK, full_name, address, ssn (UNIQUE), role
-CREATE TABLE employee (
-    employee_id SERIAL PRIMARY KEY,
-    hotel_id INT,
-    full_name VARCHAR(100) NOT NULL,
-    address TEXT,
-    ssn VARCHAR(11) UNIQUE,
-    role VARCHAR(50),
-    FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id) ON DELETE CASCADE
-)
-
 --employee_roles (employee_id PK, role PK)
 CREATE TABLE employee_roles (
-    employee_id INT,
+    e_ssn VARCHAR(11),
     role VARCHAR(50),
-    PRIMARY KEY (employee_id, role),
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
+    PRIMARY KEY (e_ssn, role),
+    FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE CASCADE
+)
+
+--renting (renting_id PK, room_num FK, e_ssn FK, start_date, end_date)
+CREATE TABLE renting (
+    renting_id SERIAL PRIMARY KEY,
+    room_num INT,
+    e_ssn VARCHAR(11),
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (room_num) REFERENCES room(hotel_id, room_num) ON DELETE SET NULL,
+    FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE SET NULL
+)
+
+--booking (booking_id PK, room_num FK, start_date, end_date)
+CREATE TABLE booking (
+    booking_id SERIAL PRIMARY KEY,
+    room_num INT,
+    start_date DATE,
+    end_date DATE CHECK (end_date > start_date),
+    FOREIGN KEY (room_num) REFERENCES room(hotel_id, room_num) ON DELETE SET NULL
 )
 
 --customer (ssn PK, booking_id FK, renting_id FK, name, address, registration_date,)
@@ -130,22 +146,4 @@ CREATE TABLE customer (
     FOREIGN KEY (renting_id) REFERENCES renting(renting_id) ON DELETE SET NULL
 )
 
---renting (renting_id PK, room_num FK, e_ssn FK, start_date, end_date)
-CREATE TABLE renting (
-    renting_id SERIAL PRIMARY KEY,
-    room_num INT,
-    e_ssn VARCHAR(11),
-    start_date DATE,
-    end_date DATE,
-    FOREIGN KEY (room_num) REFERENCES room(number) ON DELETE SET NULL,
-    FOREIGN KEY (e_ssn) REFERENCES employee(ssn) ON DELETE SET NULL
-)
-
---booking (booking_id PK, room_num FK, start_date, end_date)
-CREATE TABLE booking (
-    booking_id SERIAL PRIMARY KEY,
-    room_num INT,
-    start_date DATE,
-    end_date DATE,
-    FOREIGN KEY (room_num) REFERENCES room(number) ON DELETE SET NULL
-)
+-
