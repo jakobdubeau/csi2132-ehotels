@@ -11,16 +11,16 @@ CREATE TABLE hotel_chain (
 );
 
 CREATE TABLE hotel_chain_email (
-    name VARCHAR(100) UNIQUE,
-    office_address VARCHAR(100) UNIQUE,
+    name VARCHAR(100),
+    office_address VARCHAR(100),
     contact_emails TEXT UNIQUE,
     PRIMARY KEY (name, office_address, contact_emails),
     FOREIGN KEY (name) REFERENCES hotel_chain(name) ON DELETE CASCADE
 );
 
 CREATE TABLE hotel_chain_phone (
-    name VARCHAR(100) UNIQUE,
-    office_address VARCHAR(100) UNIQUE,
+    name VARCHAR(100),
+    office_address VARCHAR(100),
     contact_phone_numbers TEXT UNIQUE,
     PRIMARY KEY (name, office_address, contact_phone_numbers),
     FOREIGN KEY (name) REFERENCES hotel_chain(name) ON DELETE CASCADE
@@ -51,7 +51,7 @@ CREATE TABLE hotel_phone (
 --room (hotel_id PK, number PK, price, capacity, can_be_extend, view_type, amenities, damages)
 CREATE TABLE room (
     hotel_id INT,
-    number INT UNIQUE,
+    number INT,
     price DECIMAL CHECK (price >= 0),
     capacity INT CHECK (capacity > 0),
     can_be_extend BOOLEAN,
@@ -140,5 +140,35 @@ CREATE TABLE customer (
     address TEXT,
     registration_date DATE DEFAULT CURRENT_DATE,
     FOREIGN KEY (booking_id) REFERENCES booking(booking_id) ON DELETE SET NULL,
+    FOREIGN KEY (renting_id) REFERENCES renting(renting_id) ON DELETE SET NULL
+);
+
+-- booking_archive (no FKs, history preserved even after deletes)
+CREATE TABLE booking_archive (
+    booking_id INT PRIMARY KEY,
+    hotel_id INT,
+    room_number INT,
+    start_date DATE,
+    end_date DATE,
+    archived_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- renting_archive (no FKs, history preserved even after deletes)
+CREATE TABLE renting_archive (
+    renting_id INT PRIMARY KEY,
+    hotel_id INT,
+    room_number INT,
+    e_ssn VARCHAR(11),
+    start_date DATE,
+    end_date DATE,
+    archived_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- payment (per renting, no payment history required per spec)
+CREATE TABLE payment (
+    payment_id SERIAL PRIMARY KEY,
+    renting_id INT,
+    amount DECIMAL CHECK (amount > 0),
+    payment_date DATE DEFAULT CURRENT_DATE,
     FOREIGN KEY (renting_id) REFERENCES renting(renting_id) ON DELETE SET NULL
 );
