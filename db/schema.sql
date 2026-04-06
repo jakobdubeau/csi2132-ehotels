@@ -1,21 +1,13 @@
 -- database schema--
 
-----------QUESTIONS----------
--- does hotels chain address have to be a PK
-
-
-
-
-
 --hotel_chain (name pk, office_address pk, hotels_num, concact_emails, contact_phone_numbers)
 --Each Hotel chain name, office address, email and phone number must be unique
 CREATE TABLE hotel_chain (
-    name VARCHAR(100) UNIQUE,
+    name VARCHAR(100) PRIMARY KEY,
     office_address VARCHAR(100) UNIQUE,
     hotels_num INT CHECK (hotels_num >= 0),
     contact_emails TEXT UNIQUE,
     contact_phone_numbers TEXT UNIQUE,
-    PRIMARY KEY (name, office_address)
 )
 
 CREATE TABLE hotel_chain_email (
@@ -23,7 +15,7 @@ CREATE TABLE hotel_chain_email (
     office_address VARCHAR(100) UNIQUE,
     contact_emails TEXT UNIQUE,
     PRIMARY KEY (name, office_address, contact_emails),
-    FOREIGN KEY (name, office_address) REFERENCES hotel_chain(name, office_address) ON DELETE CASCADE
+    FOREIGN KEY (name) REFERENCES hotel_chain(name) ON DELETE CASCADE
 )
 
 CREATE TABLE hotel_chain_phone (
@@ -31,7 +23,7 @@ CREATE TABLE hotel_chain_phone (
     office_address VARCHAR(100) UNIQUE,
     contact_phone_numbers TEXT UNIQUE,
     PRIMARY KEY (name, office_address, contact_phone_numbers),
-    FOREIGN KEY (name, office_address) REFERENCES hotel_chain(name, office_address) ON DELETE CASCADE
+    FOREIGN KEY (name) REFERENCES hotel_chain(name) ON DELETE CASCADE
 )
 
 --hotel (hotel_id PK, hotel_chain_name FK, address, email, rooms_num, rating, phone_numbers)
@@ -43,8 +35,8 @@ CREATE TABLE hotel(
     email VARCHAR(100) UNIQUE,
     rooms_num INT CHECK (rooms_num >= 0),
     rating DECIMAL CHECK (rating >= 0 AND rating <= 5),
-    phone_numbers TEXT UNIQUE,
-    FOREIGN KEY (hotel_chain_name) REFERENCES hotel_chain(name, office_address) ON DELETE SET NULL
+    phone_number TEXT UNIQUE,
+    FOREIGN KEY (hotel_chain_name) REFERENCES hotel_chain(name) ON DELETE SET NULL
 )
 
 --hotel_phone (hotel_id PK, phone_number PK)
