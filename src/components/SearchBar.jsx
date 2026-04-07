@@ -9,12 +9,19 @@ const CATEGORIES = [1, 2, 3, 4, 5]
 const defaultFilters = {
   checkIn: "", checkOut: "", area: "", capacity: "",
   hotelChain: "", category: "", totalRooms: "", minPrice: "", maxPrice: "",
+  sortBy: "price",
 }
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, hasResults }) {
   const [filters, setFilters] = useState(defaultFilters)
   const [showFilters, setShowFilters] = useState(false)
   const filterRef = useRef(null)
+  const mounted = useRef(false)
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return }
+    if (hasResults) onSearch(filters)
+  }, [filters.sortBy])
 
   const set = (key, value) => setFilters((prev) => ({ ...prev, [key]: value }))
 
@@ -165,12 +172,25 @@ export default function SearchBar({ onSearch }) {
                     />
                   </div>
                 </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1">Sort By</label>
+                  <select
+                    value={filters.sortBy}
+                    onChange={(e) => set("sortBy", e.target.value)}
+                    className="w-full px-4 py-3.5 bg-gray-50 rounded-xl text-base border border-gray-200 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="price">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="rating">Rating: High to Low</option>
+                    <option value="capacity">Capacity: Low to High</option>
+                  </select>
+                </div>
               </div>
             </div>
           )}
         </div>
         <button onClick={() => onSearch(filters)}
-          className="px-8 py-3.5 bg-blue-400 hover:bg-blue-300 text-white rounded-xl text-base font-semibold transition-all cursor-pointer">
+          className="px-8 py-3.5 bg-blue-500 hover:bg-blue-400 text-white rounded-xl text-base font-semibold transition-all cursor-pointer">
           Search
         </button>
       </div>
