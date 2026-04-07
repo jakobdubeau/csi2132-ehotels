@@ -191,6 +191,10 @@ export async function getBookings() {
   return result.rows
 }
 
+export async function deleteBooking(booking_id) {
+  await pool.query("DELETE FROM booking WHERE booking_id=$1", [booking_id])
+}
+
 export async function createBooking(data) {
   // data: { customer_ssn, hotel_id, room_number, start_date, end_date }
   const result = await pool.query(
