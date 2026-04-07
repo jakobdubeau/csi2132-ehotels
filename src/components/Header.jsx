@@ -42,16 +42,21 @@ export default function Header() {
         ))}
       </div>
 
-      <div className="flex-1 flex justify-end">
+      <div className="flex-1 flex justify-end items-center gap-3">
+        {person && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-sm text-gray-600">
+            <span>{person.name}</span>
+            <button onClick={() => setPerson(null)} className="text-gray-400 hover:text-gray-600 cursor-pointer leading-none">✕</button>
+          </div>
+        )}
         <div className="relative group">
           <button
             onClick={toggleRole}
-            className="px-5 py-2 bg-blue-300 text-white rounded-full text-base cursor-pointer hover:bg-blue-400 duration-200"
+            className="w-28 py-2 bg-blue-300 text-white rounded-full text-base cursor-pointer hover:bg-blue-400 duration-200 text-center"
           >
-            {person ? `${isEmployee ? "Employee" : "Customer"}: ${person.name}` : (isEmployee ? "Employee" : "Customer")}
+            {isEmployee ? "Employee" : "Customer"}
           </button>
-
-          <div className="absolute right-0 top-full pt-2 hidden group-hover:block z-50 min-w-48">
+          <div className="absolute right-0 top-full pt-2 hidden group-hover:block z-50 w-48">
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 py-2 max-h-64 overflow-y-auto">
               {people.map(p => (
                 <button
