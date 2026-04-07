@@ -22,8 +22,7 @@ SELECT
     e.address,
     e.roles
 FROM employee e
-WHERE e.hotel_id = 1;   -- replace with the actual hotel_id
-
+WHERE e.hotel_id = 1; 
 
 --aggregation
 --counts rooms for a given hotel
@@ -34,7 +33,7 @@ SELECT
 FROM hotel h
 LEFT JOIN room r ON h.hotel_id = r.hotel_id
 WHERE h.hotel_id = 1
-GROUP BY h.hotel_id, h.address;
+GROUP BY h.hotel_id, h.address
 ORDER BY total_rooms;
 
 --nested
