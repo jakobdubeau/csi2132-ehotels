@@ -56,7 +56,13 @@ export async function searchRooms(filters) {
     query += ` AND r.price <= $${params.length}`
   }
 
-  query += ` ORDER BY r.price`
+  const sortMap = {
+    price: "r.price ASC",
+    price_desc: "r.price DESC",
+    rating: "h.rating DESC",
+    capacity: "r.capacity ASC",
+  }
+  query += ` ORDER BY ${sortMap[filters.sortBy] || "r.price ASC"}`
   const result = await pool.query(query, params)
   return result.rows
 }

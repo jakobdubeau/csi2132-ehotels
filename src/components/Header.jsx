@@ -52,7 +52,7 @@ export default function Header() {
         <div className="relative group">
           <button
             onClick={toggleRole}
-            className="w-28 py-2 bg-blue-300 text-white rounded-full text-base cursor-pointer hover:bg-blue-400 duration-200 text-center"
+            className="w-28 py-2 bg-blue-400 text-white rounded-full text-base cursor-pointer hover:bg-blue-300 duration-200 text-center"
           >
             {isEmployee ? "Employee" : "Customer"}
           </button>
