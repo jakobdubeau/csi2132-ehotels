@@ -90,7 +90,7 @@ export default function SearchBar({ onSearch }) {
           </button>
 
           {showFilters && (
-            <div className="absolute right-0 top-full mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 z-50">
+            <div className="absolute right-0 bottom-full mb-2 w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 z-50">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-gray-800">More Filters</h3>
                 <button
