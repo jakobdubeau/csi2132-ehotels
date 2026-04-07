@@ -1,23 +1,34 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRole } from "../context/RoleContext"
+import { getCustomers, getEmployees } from "../lib/actions"
 
 export default function Header() {
   const pathname = usePathname()
-  const [role, setRole] = useState(false)
+  const { isEmployee, toggleRole, person, setPerson } = useRole()
+  const [people, setPeople] = useState([])
+
+  useEffect(() => {
+    const fetch = isEmployee ? getEmployees : getCustomers
+    fetch().then(setPeople)
+  }, [isEmployee])
 
   const links = [
     { name: "Home", href: "/" },
     { name: "Manage", href: "/insert" },
-    { name: "Bookings", href: "/bookings" },
+    { name: "Views", href: "/views" },
   ]
 
   return (
-    <nav className="flex justify-between items-center px-16 md:px-30 py-6">
-      <Link href="/" className="text-black text-3xl font-bold tracking-tight">
-        eHotels
-      </Link>
+    <nav className="flex items-center px-16 md:px-30 py-6">
+      <div className="flex-1">
+        <Link href="/" className="text-black text-3xl font-bold tracking-tight">
+          eHotels
+        </Link>
+      </div>
+
       <div className="flex items-center gap-10 text-lg">
         {links.map(link => (
           <Link key={link.name} href={link.href}
@@ -30,12 +41,33 @@ export default function Header() {
           </Link>
         ))}
       </div>
-      <button
-        className="px-5 py-2 bg-blue-300 text-white rounded-full text-base cursor-pointer hover:bg-blue-400 duration-200"
-        onClick={() => setRole(!role)}
-      >
-        {role ? "Employee" : "Customer"}
-      </button>
+
+      <div className="flex-1 flex justify-end">
+        <div className="relative group">
+          <button
+            onClick={toggleRole}
+            className="px-5 py-2 bg-blue-300 text-white rounded-full text-base cursor-pointer hover:bg-blue-400 duration-200"
+          >
+            {person ? `${isEmployee ? "Employee" : "Customer"}: ${person.name}` : (isEmployee ? "Employee" : "Customer")}
+          </button>
+
+          <div className="absolute right-0 top-full pt-2 hidden group-hover:block z-50 min-w-48">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 py-2 max-h-64 overflow-y-auto">
+              {people.map(p => (
+                <button
+                  key={p.ssn}
+                  onClick={() => setPerson(p)}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors cursor-pointer ${
+                    person?.ssn === p.ssn ? "text-blue-500 font-medium" : "text-gray-700"
+                  }`}
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   )
 }

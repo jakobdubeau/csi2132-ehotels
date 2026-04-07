@@ -92,23 +92,23 @@ export async function getEmployees() {
   const result = await pool.query(
     `SELECT e.*, h.address as hotel_address, h.hotel_chain_name
      FROM employee e JOIN hotel h ON e.hotel_id = h.hotel_id
-     ORDER BY e.full_name`
+     ORDER BY e.name`
   )
   return result.rows
 }
 
 export async function createEmployee(data) {
   const result = await pool.query(
-    "INSERT INTO employee (ssn, hotel_id, full_name, address, roles) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [data.ssn, data.hotel_id, data.full_name, data.address, data.roles]
+    "INSERT INTO employee (ssn, hotel_id, name, address, roles) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+    [data.ssn, data.hotel_id, data.name, data.address, data.roles]
   )
   return result.rows[0]
 }
 
 export async function updateEmployee(data) {
   const result = await pool.query(
-    "UPDATE employee SET hotel_id=$1, full_name=$2, address=$3, roles=$4 WHERE ssn=$5 RETURNING *",
-    [data.hotel_id, data.full_name, data.address, data.roles, data.ssn]
+    "UPDATE employee SET hotel_id=$1, name=$2, address=$3, roles=$4 WHERE ssn=$5 RETURNING *",
+    [data.hotel_id, data.name, data.address, data.roles, data.ssn]
   )
   return result.rows[0]
 }
@@ -203,7 +203,7 @@ export async function createBooking(data) {
 // rentings
 export async function getRentings() {
   const result = await pool.query(
-    `SELECT rt.*, c.name as customer_name, e.full_name as employee_name, h.address as hotel_address
+    `SELECT rt.*, c.name as customer_name, e.name as employee_name, h.address as hotel_address
      FROM renting rt
      JOIN customer c ON rt.customer_ssn = c.ssn
      LEFT JOIN employee e ON rt.e_ssn = e.ssn
@@ -250,7 +250,7 @@ export async function getHotelChains() {
 
 export async function getEmployeesForDropdown(hotel_id) {
   const result = await pool.query(
-    "SELECT ssn, full_name, roles FROM employee WHERE hotel_id=$1 ORDER BY full_name",
+    "SELECT ssn, name, roles FROM employee WHERE hotel_id=$1 ORDER BY name",
     [hotel_id]
   )
   return result.rows

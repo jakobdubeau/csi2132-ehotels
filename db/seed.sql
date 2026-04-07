@@ -422,7 +422,7 @@ INSERT INTO room_problems (hotel_id, number, problems) VALUES
 (29, 101, 'Torn curtain');
 
 -- employees (2 per hotel, 80 total)
-INSERT INTO employee (ssn, hotel_id, full_name, address, roles) VALUES
+INSERT INTO employee (ssn, hotel_id, name, address, roles) VALUES
 ('001-00-0001', 1,  'James Carter',       '1 Elm St, Toronto, ON',      'manager'),
 ('002-00-0002', 1,  'Carlos Rivera',      '2 Oak Ave, Toronto, ON',     'receptionist'),
 ('003-00-0003', 2,  'Sarah Mitchell',     '3 Elm St, Montreal, QC',     'manager'),

@@ -84,7 +84,7 @@ CREATE TABLE room_amenities (
 CREATE TABLE employee (
     ssn VARCHAR(11) UNIQUE PRIMARY KEY,
     hotel_id INT NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
     address TEXT NOT NULL,
     roles TEXT NOT NULL,
     FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id) ON DELETE CASCADE
