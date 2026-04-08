@@ -104,19 +104,52 @@ export async function getEmployees() {
 }
 
 export async function createEmployee(data) {
-  const result = await pool.query(
-    "INSERT INTO employee (ssn, hotel_id, name, address, roles) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [data.ssn, data.hotel_id, data.name, data.address, data.roles]
-  )
-  return result.rows[0]
+  const client = await pool.connect()
+  try {
+    await client.query("BEGIN")
+    const result = await client.query(
+      "INSERT INTO employee (ssn, hotel_id, name, address, roles) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [data.ssn, data.hotel_id, data.name, data.address, data.roles]
+    )
+    if (data.roles?.toLowerCase().includes("manager")) {
+      await client.query(
+        "INSERT INTO manager (hotel_id, e_ssn) VALUES ($1, $2)",
+        [data.hotel_id, data.ssn]
+      )
+    }
+    await client.query("COMMIT")
+    return result.rows[0]
+  } catch (e) {
+    await client.query("ROLLBACK")
+    throw e
+  } finally {
+    client.release()
+  }
 }
 
 export async function updateEmployee(data) {
-  const result = await pool.query(
-    "UPDATE employee SET hotel_id=$1, name=$2, address=$3, roles=$4 WHERE ssn=$5 RETURNING *",
-    [data.hotel_id, data.name, data.address, data.roles, data.ssn]
-  )
-  return result.rows[0]
+  const client = await pool.connect()
+  try {
+    await client.query("BEGIN")
+    const result = await client.query(
+      "UPDATE employee SET hotel_id=$1, name=$2, address=$3, roles=$4 WHERE ssn=$5 RETURNING *",
+      [data.hotel_id, data.name, data.address, data.roles, data.ssn]
+    )
+    await client.query("DELETE FROM manager WHERE e_ssn=$1", [data.ssn])
+    if (data.roles?.toLowerCase().includes("manager")) {
+      await client.query(
+        "INSERT INTO manager (hotel_id, e_ssn) VALUES ($1, $2)",
+        [data.hotel_id, data.ssn]
+      )
+    }
+    await client.query("COMMIT")
+    return result.rows[0]
+  } catch (e) {
+    await client.query("ROLLBACK")
+    throw e
+  } finally {
+    client.release()
+  }
 }
 
 export async function deleteEmployee(ssn) {

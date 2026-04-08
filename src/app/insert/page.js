@@ -334,7 +334,7 @@ function RoomsTab() {
     setForm({
       hotel_id: String(r.hotel_id), number: String(r.number), price: String(r.price),
       capacity: String(r.capacity), can_be_extend: String(r.can_be_extend),
-      view_type: r.view_type || "", amenities: Array.isArray(r.amenities) ? r.amenities.join(", ") : String(r.amenities || "").replace(/^\{|\}$/g, ""), damages: r.damages || "",
+      view_type: r.view_type || "", amenities: r.amenities || "", damages: r.damages || "",
     })
     setEditing(`${r.hotel_id}-${r.number}`)
   }
@@ -347,7 +347,7 @@ function RoomsTab() {
       hotel_id: Number(form.hotel_id), number: Number(form.number),
       price: Number(form.price), capacity: Number(form.capacity),
       can_be_extend: form.can_be_extend === "true",
-      amenities: form.amenities.split(",").map(a => a.trim()).filter(Boolean),
+      amenities: form.amenities,
     }
     if (editing) await updateRoom(data); else await createRoom(data)
     load(); cancel()
@@ -375,7 +375,7 @@ function RoomsTab() {
                 <td className={`${cellCls} text-gray-500`}>{r.capacity}</td>
                 <td className={`${cellCls} text-gray-500`}>{r.view_type ? r.view_type.replace("_", " ") : "—"}</td>
                 <td className={`${cellCls} text-gray-500`}>{r.can_be_extend ? "Yes" : "No"}</td>
-                <td className={`${cellCls} text-gray-500`}>{(Array.isArray(r.amenities) ? r.amenities.join(", ") : String(r.amenities || "").replace(/^\{|\}$/g, "")) || "—"}</td>
+                <td className={`${cellCls} text-gray-500`}>{r.amenities || "—"}</td>
                 <td className={`${cellCls} text-gray-500`}>{r.damages || "—"}</td>
                 <RowActions onEdit={() => startEdit(r)} onDelete={() => del(r.hotel_id, r.number)} />
               </tr>
