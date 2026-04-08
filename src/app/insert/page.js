@@ -120,14 +120,14 @@ function EmployeesTab() {
   useEffect(() => { load(); getHotels().then(setHotels) }, [])
 
   function startEdit(r) {
-    setForm({ ssn: r.ssn, name: r.name, address: r.address, hotel_id: String(r.hotel_id), roles: Array.isArray(r.roles) ? r.roles.join(", ") : String(r.roles || "").replace(/^\{|\}$/g, "") })
+    setForm({ ssn: r.ssn, name: r.name, address: r.address, hotel_id: String(r.hotel_id), roles: r.roles || "" })
     setEditing(r.ssn)
   }
   function cancel() { setShow(false); setEditing(null); setForm(blank) }
 
   async function submit(e) {
     e.preventDefault()
-    const data = { ...form, hotel_id: Number(form.hotel_id), roles: form.roles.split(",").map(r => r.trim()).filter(Boolean) }
+    const data = { ...form, hotel_id: Number(form.hotel_id) }
     if (editing) await updateEmployee(data); else await createEmployee(data)
     load(); cancel()
   }
@@ -151,7 +151,7 @@ function EmployeesTab() {
                 <td className={cellCls}>{r.name}</td>
                 <td className={`${cellCls} text-gray-500`}>{r.address}</td>
                 <td className={`${cellCls} text-gray-500`}>{r.hotel_id}</td>
-                <td className={`${cellCls} text-gray-500`}>{Array.isArray(r.roles) ? r.roles.join(", ") : String(r.roles || "").replace(/^\{|\}$/g, "")}</td>
+                <td className={`${cellCls} text-gray-500`}>{r.roles || ""}</td>
                 <RowActions onEdit={() => startEdit(r)} onDelete={() => del(r.ssn)} />
               </tr>
               {editing === r.ssn && (
@@ -190,7 +190,7 @@ function EmployeesTab() {
                 {hotels.map(h => <option key={h.hotel_id} value={h.hotel_id}>{h.address}</option>)}
               </select>
             </div>
-            <div><label className={labelCls}>Roles (comma-separated)</label><input value={form.roles} onChange={e => s("roles", e.target.value)} className={inputCls} placeholder="Manager, Receptionist" /></div>
+            <div><label className={labelCls}>Roles (comma-separated)</label><input value={form.roles} onChange={e => s("roles", e.target.value)} className={inputCls} placeholder="manager, receptionist" /></div>
             <FormButtons editing={editing} onCancel={cancel} />
           </form>
       }
