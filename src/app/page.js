@@ -62,7 +62,7 @@ export default function Home() {
         )}
 
         {rooms && rooms.length > 0 && (
-          <div className="max-w-6xl mx-auto px-4 pt-16 pb-20">
+          <div className="w-full max-w-6xl mx-auto px-4 pt-16 pb-20">
             <h3 className="text-2xl font-bold mb-6">{rooms.length} room{rooms.length !== 1 && "s"} found</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {rooms.map(room => (
