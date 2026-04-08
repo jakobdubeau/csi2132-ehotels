@@ -28,7 +28,7 @@ BEGIN
     SELECT COUNT(*)
     INTO counter
     FROM booking
-    WHERE customer_ssn = NEW.customer_ssn
+    WHERE customer_ssn = NEW.customer_ssn;
 
     IF counter >= 3 THEN
         RAISE EXCEPTION 'Customer % already has 3 active bookings.',

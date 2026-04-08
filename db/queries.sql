@@ -18,7 +18,7 @@ ORDER BY b.start_date;
 --find employees working in a hotel
 SELECT 
     e.ssn,
-    e.full_name,
+    e.name,
     e.address,
     e.roles
 FROM employee e
